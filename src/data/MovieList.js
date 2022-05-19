@@ -1,12 +1,15 @@
 import "./style.css";
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-function Movies(source, title) {
+function Movies({ source, title, id }) {
 	return (
-		<div className="movie-box">
-			<img src={source} alt={title} />
-		</div>
+		<Link to={`/sessoes/${id}`}>
+			<div className="movie-box">
+				<img src={source} alt={title} />
+			</div>
+		</Link>
 	);
 }
 
@@ -18,7 +21,7 @@ export default function MovieList() {
 			"https://mock-api.driven.com.br/api/v5/cineflex/movies"
 		);
 		promise.then((response) => {
-			setMovies([...response.data]);
+			setMovies(response.data);
 		});
 	}, []);
 	return (
@@ -29,6 +32,7 @@ export default function MovieList() {
 				  movies.map((movie) => (
 						<Movies
 							key={movie.id}
+							id={movie.id}
 							source={movie.posterURL}
 							title={movie.title}
 						/>
