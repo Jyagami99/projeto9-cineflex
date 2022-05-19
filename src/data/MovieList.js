@@ -25,18 +25,21 @@ export default function MovieList() {
 		});
 	}, []);
 	return (
-		<div className="content">
-			{movies.length === 0
-				? "Carregando filmes"
-				: // Colocar um gif para load
-				  movies.map((movie) => (
-						<Movies
-							key={movie.id}
-							id={movie.id}
-							source={movie.posterURL}
-							title={movie.title}
-						/>
-				  ))}
-		</div>
+		<>
+			<div className="head-title">Selecione o filme</div>
+			<div className="content">
+				{movies.length === 0
+					? "Carregando filmes"
+					: // Colocar um gif para load
+					  movies.map((movie) => (
+							<Movies
+								key={movie.id}
+								id={movie.id}
+								source={movie.posterURL}
+								title={movie.title}
+							/>
+					  ))}
+			</div>
+		</>
 	);
 }
