@@ -1,50 +1,23 @@
 import "./style.css";
+import { Link, useParams } from "react-router-dom";
 import React from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import Footer from "./Footer";
 
-function Sessions({ weekday, date, showtimes }) {
+function Sessions({ weekday, date, showtimes, id }) {
 	return (
 		<div className="session-date">
 			<span>
 				{weekday} - {date}
 			</span>
-			{showtimes.map((showtime, index) => (
-				<div key={index}>{showtime.name}</div>
-			))}
+			<Link to={`/assentos/${id}`}>
+				{showtimes.map((showtime, index) => (
+					<div className="buttons" key={index}>
+						{showtime.name}
+					</div>
+				))}
+			</Link>
 		</div>
-	);
-}
-
-function Footer() {
-	const [poster, setPoster] = React.useState([]);
-	const { idFilme } = useParams();
-
-	React.useEffect(() => {
-		const promise = axios.get(
-			`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`
-		);
-		promise.then((response) => {
-			setPoster(response.data);
-		});
-	}, [idFilme]);
-
-	return (
-		<footer>
-			<div className="footer-content">
-				{poster.length === 0 ? (
-					"carregando..."
-				) : (
-					// Colocar um gif para load
-					<>
-						<div className="footer-image">
-							<img src={poster.posterURL} alt={poster.title} />
-						</div>
-						<span className="footer-title">{poster.title}</span>
-					</>
-				)}
-			</div>
-		</footer>
 	);
 }
 
@@ -70,6 +43,7 @@ export default function SelectSessions() {
 					  sessions.map((session, index) => (
 							<Sessions
 								key={index}
+								id={session.id}
 								weekday={session.weekday}
 								date={session.date}
 								showtimes={session.showtimes}

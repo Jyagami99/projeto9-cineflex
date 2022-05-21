@@ -11,6 +11,10 @@ footer {
 	border: 1px solid #9eadba;
 }
 
+a {
+	display: flex;
+}
+
 .schedules {
 	margin: 0px 24px 150px 0px;
 }
@@ -30,7 +34,7 @@ footer {
 	width: 100%;
 }
 
-.session-date > div {
+.buttons {
 	width: 84px;
 	height: 44px;
 	display: flex;
