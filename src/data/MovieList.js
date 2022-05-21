@@ -31,9 +31,9 @@ export default function MovieList() {
 				{movies.length === 0
 					? "Carregando filmes"
 					: // Colocar um gif para load
-					  movies.map((movie) => (
+					  movies.map((movie, index) => (
 							<Movies
-								key={movie.id}
+								key={index}
 								id={movie.id}
 								source={movie.posterURL}
 								title={movie.title}
