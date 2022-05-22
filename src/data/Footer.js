@@ -11,10 +11,12 @@ export default function Footer() {
 		const promise = axios.get(
 			`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`
 		);
-		promise.then((response) => {
-			console.log(response.data);
-			setPoster(response.data);
-		});
+		promise
+			.then((response) => {
+				console.log(response.data);
+				setPoster(response.data);
+			})
+			.catch((err) => console.log(err));
 	}, [idFilme]);
 
 	return (

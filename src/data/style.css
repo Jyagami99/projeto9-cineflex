@@ -78,3 +78,32 @@ a {
 	justify-content: flex-start;
 	align-items: center;
 }
+
+.available {
+	width: 26px;
+	height: 26px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 9px 3px;
+	background-color: #c3cfd9;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+.unavailable {
+	width: 26px;
+	height: 26px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 9px 3px;
+	background-color: #fbe192;
+	border: 1px solid #f7c52b;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+.seats {
+	padding: 0px 24px;
+}
