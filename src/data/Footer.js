@@ -12,6 +12,7 @@ export default function Footer() {
 			`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`
 		);
 		promise.then((response) => {
+			console.log(response.data);
 			setPoster(response.data);
 		});
 	}, [idFilme]);

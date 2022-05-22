@@ -23,30 +23,32 @@ function Sessions({ weekday, date, showtimes, id }) {
 
 export default function SelectSessions() {
 	const { idFilme } = useParams();
-	const [sessions, setSessions] = React.useState([]);
+	const [movies, setMovies] = React.useState([]);
+	const [days, setDays] = React.useState([]);
 
 	React.useEffect(() => {
 		const promise = axios.get(
 			`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`
 		);
 		promise.then((response) => {
-			setSessions(response.data.days);
+			setDays(response.data.days);
+			setMovies(response.data);
 		});
 	}, [idFilme]);
 	return (
 		<>
 			<div className="head-title">Selecione o horário</div>
 			<div className="schedules">
-				{sessions.length === 0
+				{days.length === 0
 					? "Carregando sessões"
 					: // Colocar um gif para load
-					  sessions.map((session, index) => (
+					  days.map((day, index) => (
 							<Sessions
 								key={index}
-								id={session.id}
-								weekday={session.weekday}
-								date={session.date}
-								showtimes={session.showtimes}
+								id={movies.id}
+								weekday={day.weekday}
+								date={day.date}
+								showtimes={day.showtimes}
 							/>
 					  ))}
 				<Footer />

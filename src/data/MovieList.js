@@ -21,7 +21,7 @@ export default function MovieList() {
 			"https://mock-api.driven.com.br/api/v5/cineflex/movies"
 		);
 		promise.then((response) => {
-			setMovies(response.data);
+			setMovies([...response.data]);
 		});
 	}, []);
 	return (

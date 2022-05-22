@@ -13,8 +13,14 @@ export default function SelectSeats() {
 			`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`
 		);
 		promise.then((response) => {
+			console.log(response.data);
 			setSeats(response.data);
 		});
 	}, [idSessao]);
-	return <Footer />;
+	return (
+		<>
+			<div className="head-title">Selecione o(s) assento(s)</div>
+			<Footer />
+		</>
+	);
 }
