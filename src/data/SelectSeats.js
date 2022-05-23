@@ -19,6 +19,22 @@ function Seats({ name, isAvailable }) {
 export default function SelectSeats() {
 	const { idSessao } = useParams();
 	const [seats, setSeats] = React.useState([]);
+	const [name, setName] = React.useState("");
+	const [cpf, setCpf] = React.useState("");
+
+	function cleanInputs() {
+		setName("");
+		setCpf("");
+	}
+
+	function submitForm(event) {
+		event.preventDefault();
+		const data = {
+			name: name,
+		};
+
+		console.log(data);
+	}
 
 	React.useEffect(() => {
 		const promise = axios.get(
@@ -46,9 +62,33 @@ export default function SelectSeats() {
 							/>
 					  ))}
 			</div>
-			<div className="">
+			<div className="content seats">
+				<div className="selecionado"></div>
 				<div className="available"></div>
 				<div className="unavailable"></div>
+			</div>
+			<div className="content seats">
+				<div>Selecionado</div>
+				<div>Disponivel</div>
+				<div>Indisponivel</div>
+			</div>
+			<div className="input">
+				<form onSubmit={submitForm}>
+					<div>Nome do comprador</div>
+					<input
+						type="text"
+						placeholder="Digite seu nome..."
+						onChange={(e) => setName(e.target.value)}
+						value={name}
+					/>
+					<div>CPF do comprador</div>
+					<input
+						type="text"
+						placeholder="Digite seu CPF..."
+						onChange={(e) => setCpf(e.target.value)}
+						value={cpf}
+					/>
+				</form>
 			</div>
 			<Footer />
 		</>

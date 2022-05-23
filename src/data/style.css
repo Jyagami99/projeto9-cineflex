@@ -15,6 +15,24 @@ a {
 	display: flex;
 }
 
+input {
+	width: 100%;
+	height: 52px;
+	border: 1px solid #d5d5d5;
+	border-radius: 3px;
+	margin-bottom: 10px;
+}
+
+input::placeholder {
+	font-style: italic;
+	font-size: 18px;
+}
+
+form {
+	width: 100%;
+	padding: 0px 24px;
+}
+
 .schedules {
 	margin: 0px 24px 150px 0px;
 }
@@ -86,7 +104,23 @@ a {
 	justify-content: center;
 	align-items: center;
 	margin: 9px 3px;
+	font-size: 11px;
+	line-height: 13px;
 	background-color: #c3cfd9;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+.selecionado {
+	width: 26px;
+	height: 26px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 9px 3px;
+	font-size: 11px;
+	background-color: #8dd7cf;
+	border: 1px solid #1aae9e;
 	border-radius: 12px;
 	cursor: pointer;
 }
@@ -98,6 +132,8 @@ a {
 	justify-content: center;
 	align-items: center;
 	margin: 9px 3px;
+	font-size: 11px;
+	line-height: 13px;
 	background-color: #fbe192;
 	border: 1px solid #f7c52b;
 	border-radius: 12px;
@@ -106,4 +142,11 @@ a {
 
 .seats {
 	padding: 0px 24px;
+}
+
+.input {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin-top: 50px;
 }
