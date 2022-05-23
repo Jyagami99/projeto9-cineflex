@@ -1,19 +1,7 @@
 import "./style.css";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
-function Seats({ name, isAvailable }) {
-	return (
-		<>
-			{isAvailable === true ? (
-				<div className="available">{name}</div>
-			) : (
-				<div className="unavailable">{name}</div>
-			)}
-		</>
-	);
-}
 
 function Footer() {
 	const [poster, setPoster] = React.useState([]);
@@ -27,7 +15,6 @@ function Footer() {
 		);
 		promise
 			.then((response) => {
-				console.log(response.data);
 				setPoster(response.data.movie);
 				setName(response.data);
 				setDay(response.data.day);
@@ -63,17 +50,61 @@ function Footer() {
 export default function SelectSeats() {
 	const { idSessao } = useParams();
 	const [seats, setSeats] = React.useState([]);
+	const [selectedSeats, setSelectedSeats] = React.useState([]);
 	const [name, setName] = React.useState("");
 	const [cpf, setCpf] = React.useState("");
+	const navigate = useNavigate();
 
 	function submitForm(event) {
 		event.preventDefault();
 		const data = {
+			ids: selectedSeats,
 			name: name,
 			cpf: cpf,
 		};
 
 		console.log(data);
+
+		const promise = axios.post(
+			`https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many`,
+			data
+		);
+		promise
+			.then((response) => {
+				navigate("/sucesso");
+			})
+			.catch((err) => console.log(err));
+	}
+
+	function Seats({ id, name, isAvailable, selectedSeats, setSelectedSeats }) {
+		const toggleSelection = () => {
+			if (!isAvailable) {
+				alert("Esse assento não está disponível");
+			} else {
+				const selectedSeatIndex = selectedSeats.indexOf(id);
+
+				if (selectedSeatIndex > -1) {
+					selectedSeats.splice(selectedSeatIndex, 1);
+				} else {
+					selectedSeats.push(id);
+				}
+
+				setSelectedSeats([...selectedSeats]);
+			}
+		};
+
+		return (
+			<>
+				<div
+					className={`${isAvailable ? "available	" : "unavailable"} ${
+						selectedSeats.indexOf(id) > -1 ? "selected" : ""
+					}`}
+					onClick={toggleSelection}
+				>
+					{name}
+				</div>
+			</>
+		);
 	}
 
 	React.useEffect(() => {
@@ -96,13 +127,16 @@ export default function SelectSeats() {
 					: seats.map((seat, index) => (
 							<Seats
 								key={index}
+								id={seat.id}
 								name={seat.name}
 								isAvailable={seat.isAvailable}
+								selectedSeats={selectedSeats}
+								setSelectedSeats={setSelectedSeats}
 							/>
 					  ))}
 			</div>
 			<div className="content seats">
-				<div className="selecionado"></div>
+				<div className="selected"></div>
 				<div className="available"></div>
 				<div className="unavailable"></div>
 			</div>
@@ -113,19 +147,24 @@ export default function SelectSeats() {
 			</div>
 			<div className="input">
 				<form onSubmit={submitForm}>
-					<div>Nome do comprador</div>
+					<label htmlFor="nome">Nome do comprador</label>
 					<input
 						type="text"
+						name="nome"
 						placeholder="Digite seu nome..."
 						onChange={(e) => setName(e.target.value)}
 						value={name}
+						required
 					/>
-					<div>CPF do comprador</div>
+					<label htmlFor="nome">CPF do comprador</label>
 					<input
 						type="text"
+						name="cpf"
 						placeholder="Digite seu CPF..."
 						onChange={(e) => setCpf(e.target.value)}
 						value={cpf}
+						maxLength="11"
+						required
 					/>
 
 					<button type="submit">Reservar assento(s)</button>

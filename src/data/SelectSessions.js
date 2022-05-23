@@ -28,7 +28,6 @@ function Footer() {
 		);
 		promise
 			.then((response) => {
-				console.log(response.data);
 				setPoster(response.data);
 			})
 			.catch((err) => console.log(err));
