@@ -1,7 +1,7 @@
 import "./style.css";
-import { Link, useParams } from "react-router-dom";
 import React from "react";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 
 function Sessions({ weekday, date, showtimes }) {
 	return (

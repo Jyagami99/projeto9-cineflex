@@ -1,9 +1,9 @@
 import "./style.css";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
-function Footer() {
+function Footer(movie) {
 	const [poster, setPoster] = React.useState([]);
 	const [name, setName] = React.useState([]);
 	const [day, setDay] = React.useState([]);
@@ -47,9 +47,10 @@ function Footer() {
 	);
 }
 
-export default function SelectSeats() {
+export default function SelectSeats({ orderData }) {
 	const { idSessao } = useParams();
 	const [seats, setSeats] = React.useState([]);
+	const [movie, setMovie] = React.useState({});
 	const [selectedSeats, setSelectedSeats] = React.useState([]);
 	const [name, setName] = React.useState("");
 	const [cpf, setCpf] = React.useState("");
@@ -57,13 +58,20 @@ export default function SelectSeats() {
 
 	function submitForm(event) {
 		event.preventDefault();
+		const formData = new FormData(event.target);
 		const data = {
 			ids: selectedSeats,
-			name: name,
-			cpf: cpf,
+			name: formData.get("name"),
+			cpf: formData.get("cpf"),
 		};
 
 		console.log(data);
+
+		orderData.seatsData = data.ids.map((seat) => findSeat(seat));
+		orderData.buyerData = {
+			name: data.name,
+			cpf: data.cpf,
+		};
 
 		const promise = axios.post(
 			`https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many`,
@@ -113,10 +121,28 @@ export default function SelectSeats() {
 		);
 		promise
 			.then((response) => {
+				const responseData = response.data;
+
+				orderData.movieData = {
+					weekday: responseData.day.weekday,
+					date: responseData.day.date,
+					title: responseData.movie.title,
+					hours: responseData.name,
+				};
 				setSeats([...response.data.seats]);
+				setMovie({
+					title: responseData.movie.title,
+					posterURL: responseData.movie.posterURL,
+					weekday: responseData.day.weekday,
+					hours: responseData.name,
+				});
 			})
 			.catch((err) => console.log(err));
-	}, [idSessao]);
+	}, [idSessao, orderData]);
+
+	function findSeat(seatID) {
+		return seats.find((seat) => seat.id === seatID);
+	}
 
 	return (
 		<>
@@ -147,10 +173,10 @@ export default function SelectSeats() {
 			</div>
 			<div className="input">
 				<form onSubmit={submitForm}>
-					<label htmlFor="nome">Nome do comprador</label>
+					<label htmlFor="name">Nome do comprador</label>
 					<input
 						type="text"
-						name="nome"
+						name="name"
 						placeholder="Digite seu nome..."
 						onChange={(e) => setName(e.target.value)}
 						value={name}
@@ -163,14 +189,13 @@ export default function SelectSeats() {
 						placeholder="Digite seu CPF..."
 						onChange={(e) => setCpf(e.target.value)}
 						value={cpf}
-						maxLength="11"
 						required
 					/>
 
 					<button type="submit">Reservar assento(s)</button>
 				</form>
 			</div>
-			<Footer />
+			<Footer movie={movie} />
 		</>
 	);
 }
