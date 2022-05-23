@@ -33,6 +33,16 @@ form {
 	padding: 0px 24px;
 }
 
+button {
+	width: 60%;
+	height: 42px;
+	background: #e8833a;
+	border-radius: 3px;
+	font-size: 18px;
+	line-height: 21px;
+	color: #ffffff;
+}
+
 .schedules {
 	margin: 0px 24px 150px 0px;
 }

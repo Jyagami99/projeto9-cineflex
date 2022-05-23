@@ -2,7 +2,6 @@ import "./style.css";
 import React from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Footer from "./Footer";
 
 function Seats({ name, isAvailable }) {
 	return (
@@ -16,21 +15,62 @@ function Seats({ name, isAvailable }) {
 	);
 }
 
+function Footer() {
+	const [poster, setPoster] = React.useState([]);
+	const [name, setName] = React.useState([]);
+	const [day, setDay] = React.useState([]);
+	const { idSessao } = useParams();
+
+	React.useEffect(() => {
+		const promise = axios.get(
+			`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`
+		);
+		promise
+			.then((response) => {
+				console.log(response.data);
+				setPoster(response.data.movie);
+				setName(response.data);
+				setDay(response.data.day);
+			})
+			.catch((err) => console.log(err));
+	}, [idSessao]);
+
+	return (
+		<footer>
+			<div className="footer-content">
+				{poster.length === 0 ? (
+					"carregando..."
+				) : (
+					// Colocar um gif para load
+					<>
+						<div className="footer-image">
+							<img src={poster.posterURL} alt={poster.title} />
+						</div>
+						<div>
+							<span className="footer-title">{poster.title}</span>
+							<br />
+							<span className="footer-title">
+								{day.weekday} - {name.name}
+							</span>
+						</div>
+					</>
+				)}
+			</div>
+		</footer>
+	);
+}
+
 export default function SelectSeats() {
 	const { idSessao } = useParams();
 	const [seats, setSeats] = React.useState([]);
 	const [name, setName] = React.useState("");
 	const [cpf, setCpf] = React.useState("");
 
-	function cleanInputs() {
-		setName("");
-		setCpf("");
-	}
-
 	function submitForm(event) {
 		event.preventDefault();
 		const data = {
 			name: name,
+			cpf: cpf,
 		};
 
 		console.log(data);
@@ -42,7 +82,6 @@ export default function SelectSeats() {
 		);
 		promise
 			.then((response) => {
-				console.log(response.data);
 				setSeats([...response.data.seats]);
 			})
 			.catch((err) => console.log(err));
@@ -88,6 +127,8 @@ export default function SelectSeats() {
 						onChange={(e) => setCpf(e.target.value)}
 						value={cpf}
 					/>
+
+					<button type="submit">Reservar assento(s)</button>
 				</form>
 			</div>
 			<Footer />
