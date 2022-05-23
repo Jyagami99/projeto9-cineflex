@@ -144,6 +144,32 @@ export default function SelectSeats({ orderData }) {
 		return seats.find((seat) => seat.id === seatID);
 	}
 
+	function cpfMask(e) {
+		const value = e.target.value;
+		const lastCharIndex = value.length - 1;
+
+		//only numbers condition
+		if (isNaN(value[lastCharIndex])) {
+			setCpf(value.substring(0, lastCharIndex));
+			return;
+		}
+
+		//add '.' to separate sets of numbers
+		if (value.length === 3 || value.length === 7) {
+			setCpf(value + ".");
+			return;
+		}
+
+		//add '-' to separate digit
+		if (value.length === 11) {
+			setCpf(value + "-");
+			return;
+		}
+
+		//update state and input
+		setCpf(value);
+	}
+
 	return (
 		<>
 			<div className="head-title">Selecione o(s) assento(s)</div>
@@ -187,8 +213,9 @@ export default function SelectSeats({ orderData }) {
 						type="text"
 						name="cpf"
 						placeholder="Digite seu CPF..."
-						onChange={(e) => setCpf(e.target.value)}
+						onChange={(e) => cpfMask(e)}
 						value={cpf}
+						maxLength="14"
 						required
 					/>
 
